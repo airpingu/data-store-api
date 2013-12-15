@@ -140,7 +140,7 @@ Style guide to contributors:
       </pre>
 
       <p>
-        Applications can call the <code>sync()</code> method defined in the
+        An application can call the <code>sync()</code> method defined in the
         <a>DataStore</a> to keep its local storage synchronized with the data
         store, which creates a <a>DataStoreCursor</a> to retrieve the change
         history starting from a certain revision kept in the application to the
@@ -369,9 +369,9 @@ Style guide to contributors:
     <section>
       <h2><a>DataStore</a> Interface</h2>
       <p>
-        The <a>DataStore</a> interface represents the properties of a data store
-        and a set of operations that can be used to manage and synchronize the
-        content of the data store.
+        The <a>DataStore</a> interface represents a bunch of properties of the
+        data store and a set of operations that can be used to manage and
+        synchronize the content of the data store.
       </p>
 
       <dl title="interface DataStore : EventTarget" class="idl">
