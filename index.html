@@ -374,6 +374,8 @@ Style guide to contributors:
         synchronize the content of the data store.
       </p>
 
+      <div title="typedef (DOMString or unsigned long) DataStoreKey" class='idl'></div>
+
       <dl title="interface DataStore : EventTarget" class="idl">
 
         <dt>readonly attribute DOMString <a>name</a></dt>
@@ -401,32 +403,18 @@ Style guide to contributors:
       
         <dt>Promise get ()</dt>
           <dd>
-            This method makes a request to retrieve the data record by the
+            This method makes a request to retrieve the data record(s) by the
             <code>id</code> parameter. It returns a new <code>Promise</code>
             that will be used to notify the caller about the result of the
             operation, which is an arbitrary object to represent the data
-            record.
+            record if <code>id</code> is a single value, or a set of data
+            records if <code>id</code> is an array of values.
             <dl class='parameters'>
-              <dt>DOMString id</dt>
+              <dt>DataStoreKey... id</dt>
                 <dd>
-                  Identifies the data record that is requested to be retrieved.
+                  Identifies the data record(s) that is requested to be
+                  retrieved.
                 </dd>
-            </dl>
-          </dd>
-
-        <dt>Promise get ()</dt>
-          <dd>
-            This method makes a request to retrieve a set of data records by the
-            <code>ids</code> parameter. It returns a new <code>Promise</code>
-            that will be used to notify the caller about the result of the
-            operation, which is an array of arbitrary objects to represent a
-            set of data records.
-            <dl class='parameters'>
-              <dt>DOMString[] ids</dt>
-              <dd>
-                Identifies a set of data records that are requested to be
-                retrieved.
-              </dd>
             </dl>
           </dd>
 
@@ -441,7 +429,7 @@ Style guide to contributors:
                 <dd>
                   Specifies the content of the data record to update.
                 </dd>
-              <dt>DOMString id</dt>
+              <dt>DataStoreKey id</dt>
                 <dd>
                   Identifies the data record that is requested to be updated.
                 </dd>
@@ -460,7 +448,7 @@ Style guide to contributors:
                 <dd>
                   Specifies the content of the data record to add or update.
                 </dd>
-              <dt>optional DOMString id</dt>
+              <dt>optional DataStoreKey id</dt>
                 <dd>
                   Identifies the data record that is requested to be updated. If
                   this parameter is absent, this method will add the data record
@@ -477,7 +465,7 @@ Style guide to contributors:
             operation, which is a boolean value to indicate whether the data
             record is deleted or not.
             <dl class='parameters'>
-              <dt>DOMString id</dt>
+              <dt>DataStoreKey id</dt>
                 <dd>
                   Identifies the data record that is requested to be deleted.
                 </dd>
@@ -571,19 +559,6 @@ Style guide to contributors:
               with <em>dataRecord</em> as the <code>value</code> argument.
             </li>
           </ol>
-        </ol>
-
-        <p>
-          The <dfn><code>get</code></dfn> method when invoked MUST run the
-          following steps:
-        </p>
-        <ol>
-          <li>
-            Step 1.
-          </li>
-          <li>
-            Step 2.
-          </li>
         </ol>
 
         <p>
@@ -783,7 +758,7 @@ Style guide to contributors:
             changes a data record.
           </dd>
 
-        <dt>DOMString id</dt>
+        <dt>DataStoreKey id</dt>
           <dd>
             MUST return the identifier of the changed data record in the data
             store.
@@ -817,7 +792,7 @@ Style guide to contributors:
             changes a data record.
           </dd>
 
-        <dt>readonly attribute DOMString id</dt>
+        <dt>readonly attribute DataStoreKey id</dt>
           <dd>
             MUST return the identifier of the changed data record in the data
             store.
