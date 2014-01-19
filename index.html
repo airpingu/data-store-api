@@ -114,7 +114,7 @@ Style guide to contributors:
           stores[0].get(42).then(function(obj) {
             // Update the object
             obj.name = 'foo';
-            stores[0].put(obj, 42).then(function(id) {
+            stores[0].update(obj, 42).then(function(id) {
               // The object has been updated.
             }, function(error) {
               // The object fails to be updated.
@@ -418,11 +418,11 @@ Style guide to contributors:
             </dl>
           </dd>
 
-        <dt>Promise put ()</dt>
+        <dt>Promise update ()</dt>
           <dd>
-            This method makes a request to update the data record by the
-            <code>data</code> and the <code>id</code> parameters. It returns a
-            new <code>Promise</code> that will be used to notify the caller
+            This method makes a request to update the existing data record by
+            the <code>data</code> and the <code>id</code> parameters. It returns
+            a new <code>Promise</code> that will be used to notify the caller
             about the result of the operation.
             <dl class='parameters'>
               <dt>any data</dt>
@@ -438,21 +438,15 @@ Style guide to contributors:
 
         <dt>Promise add ()</dt>
           <dd>
-            This method makes a request to add or update the data record by the
-            <code>data</code> and the <code>id</code> parameters. It returns a
-            new <code>Promise</code> that will be used to notify the caller
-            about the result of the operation, which is an identifier to access
-            the data record that is added or updated.
+            This method makes a request to add a new data record by the
+            <code>data</code> parameter. It returns a new <code>Promise</code>
+            that will be used to notify the caller about the result of the
+            operation, which is an identifier to access the data record that is
+            added.
             <dl class='parameters'>
               <dt>any data</dt>
                 <dd>
-                  Specifies the content of the data record to add or update.
-                </dd>
-              <dt>optional DataStoreKey id</dt>
-                <dd>
-                  Identifies the data record that is requested to be updated. If
-                  this parameter is absent, this method will add the data record
-                  in the data store as a new one.
+                  Specifies the content of the data record to add.
                 </dd>
             </dl>
           </dd>
@@ -513,13 +507,9 @@ Style guide to contributors:
           <dd>
             Handles the <code>change</code> event of type
             <a>DataStoreChangeEvent</a>, fired when a data record is
-            added, modefied or deleted in the data store.
+            added, updated or deleted in the data store.
           </dd>
       </dl>
-
-      <div class='note'>
-        Can the add() and put() be unified?
-      </div>
 
       <section>
         <h3>Steps</h3>
@@ -562,7 +552,7 @@ Style guide to contributors:
         </ol>
 
         <p>
-          The <dfn><code>put</code></dfn> method when invoked MUST run the
+          The <dfn><code>update</code></dfn> method when invoked MUST run the
           following steps:
         </p>
         <ol>
