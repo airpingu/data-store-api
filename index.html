@@ -270,23 +270,41 @@ Style guide to contributors:
             datastores-owned: {
               "contacts": {
                 "readonly": true,
-                "description": "own the contacts"
+                "description": "own the contacts data store"
               }
             }
           }
         </pre>
 
         <p>
-          For the application that wants to access the data store, its manifest
-          MUST be claimed to access the data store, which is shown as the
-          following example.
+          For the application that wants to read or modify (e.g., add, update,
+          remove, clear... etc) the content of the data store, its manifest MUST
+          be claimed to access the data store by <code>readwrite</code>, which
+          is shown as the following example.
+        </p>
+        <pre class="example highlight">
+          {
+            datastores-access: {
+              "contacts": {
+                "access": "readwrite",
+                "description": "access (read and write) the contacts data store"
+              }
+            }
+          }
+        </pre>
+
+        <p>
+          For the application that simply wants to read the content of the data
+          store without modifying it, its manifest MUST be claimed to access the
+          data store by <code>readonly</code>, which is shown as the following
+          example.
         </p>
         <pre class="example highlight">
           {
             datastores-access: {
               "contacts": {
                 "access": "readonly",
-                "description": "access the contacts"
+                "description": "access (read only) the contacts data store"
               }
             }
           }
