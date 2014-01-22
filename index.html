@@ -19,10 +19,6 @@
           name: "Gene Lian",
           company: "Mozilla",
           companyURL: "http://www.mozilla.org"
-        },{
-          name: "Thinker Lee",
-          company: "Mozilla",
-          companyURL: "http://www.mozilla.org"
         }],
         inlineCSS:    true,
         noIDLIn:      true,
@@ -220,9 +216,9 @@ Style guide to contributors:
     <section>
       <h2>Terminology</h2>
       <p>
-        The <code><a
+        The <dfn><a
         href="http://dev.w3.org/html5/spec/webappapis.html#eventhandler">
-        EventHandler</a></code> interface represents a callback used for event
+        EventHandler</a></dfn> interface represents a callback used for event
         handlers as defined in [[!HTML5]].
       </p>
     
@@ -274,8 +270,8 @@ Style guide to contributors:
         <p>
           As shown as the following example, if the applicaton wants to provide
           a read-only data store, its manifest MUST be claimed to own the data
-          store by setting the attribute <code>readonly</code> to be
-          <code>true</code>.
+          store by setting the attribute <code>readonly</code> to
+          <em>true</em>.
         </p>
         <pre class="example highlight">
           {
@@ -302,8 +298,7 @@ Style guide to contributors:
           As shown as the following example, if the application wants to read or
           modify (e.g., add, update, remove, clear... etc) the content of the
           data store, its manifest MUST be claimed to access the data store by
-          setting the attribute <code>access</code> to be
-          <code>readwrite</code>.
+          setting the attribute <code>access</code> to <em>readwrite</em>.
         </p>
         <pre class="example highlight">
           {
@@ -320,7 +315,7 @@ Style guide to contributors:
           As shown as the following example, if the application simply wants to
           read the content of the data store without modifying it, its manifest
           MUST be claimed to access the data store by setting the attribute
-          <code>access</code> to be <code>readonly</code>.
+          <code>access</code> to <em>readonly</em>.
         </p>
         <pre class="example highlight">
           {
@@ -381,8 +376,9 @@ Style guide to contributors:
             Return <var>promise</var> to the caller.
           </li>
           <li>
-            Make a request to the system to get the data store(s) with the label
-            equal to the <code>label</code> parameter passed in the request.
+            Make a request to the system to retrieve the data store(s) with the
+            label equal to the <code>label</code> parameter passed in the
+            request.
           </li>
           <li>
             If an <var>error</var> occurs invoke <em>resolver</em>'s <a
@@ -394,8 +390,9 @@ Style guide to contributors:
           </li>
           <ol>
             <li>
-              Let <var>dataStores</var> be the array of <code>DataStore</code>
-              elements whose label matches the <code>label</code> parameter.
+              Let <var>dataStores</var> be the array of the retrieved
+              <a>DataStore</a> elements whose label matches the
+              <code>label</code> parameter.
             </li>
             <li>
               Invoke <em>resolver</em>'s <a
@@ -531,21 +528,21 @@ Style guide to contributors:
             the total number of data records saved in the data store.
           </dd>
 
-        <dt>Promise sync ()</dt>
+        <dt>DataStoreCursor sync ()</dt>
           <dd>
             This method makes a request to retrieve the change history between a
             particular revision and the current revision of the data store by the
             <code>revisionId</code> parameter. It returns a new
-            <code>Promise</code> that will be used to notify the caller about
-            the result of the operation, which is a <a>DataStoreCursor</a> to
-            access a set of <a>DataStoreTask</a> elements.
+            <a>DataStoreCursor</a> that will be used to iteratively access a set
+            of <a>DataStoreTask</a> elements.
             <dl class='parameters'>
               <dt>optional DOMString revisionId</dt>
                 <dd>
                   Identifies the revision of the data store that the application
                   currently keeps. If this parameter is absent or cannot be
-                  identified, this method will return all the existing data
-                  records currently saved in the data store.
+                  identified, this method will return a <a>DataStoreCursor</a>
+                  iterating through all the existing data records currently
+                  saved in the data store.
                 </dd>
             </dl>
           </dd>
@@ -575,8 +572,8 @@ Style guide to contributors:
             Return <var>promise</var> to the caller.
           </li>
           <li>
-            Make a request to the system to get the data record with the
-            identifier equal to the <code>id</code> parameter passed in the
+            Make a request to the data store to retrieve the data record(s) with
+            the identifier equal to the <code>id</code> parameter passed in the
             request.
           </li>
           <li>
@@ -589,8 +586,7 @@ Style guide to contributors:
           </li>
           <ol>
             <li>
-              Let <var>dataRecord</var> be the data record whose identifier
-              matches the <code>id</code> parameter.
+              Let <var>dataRecord</var> be the retrieved data record(s).
             </li>
             <li>
               Invoke <em>resolver</em>'s <a
@@ -606,11 +602,53 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
+            Let <var>promise</var> be a new <code>Promise</code> object and
+            <var>resolver</var> be its associated <code>resolver</code>.
           </li>
           <li>
-            Step 2.
+            Return <var>promise</var> to the caller.
           </li>
+          <li>
+            Make a request to the data store to retrieve the data record with
+            the identifier equal to the <code>id</code> parameter passed in the
+            request.
+          </li>
+          <li>
+            If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            with <em>error</em> as the <code>value</code> argument.
+          </li>
+          <li>
+            When the request has been successfully completed:
+          </li>
+          <ol>
+            <li>
+              Let <var>dataRecord</var> be the retrieved data record.
+            </li>
+            <li>
+              Replace <em>dataRecord</em> by the <code>data</code> parameter
+              passed in the request.
+            </li>
+            <li>
+              Make a request to the data store to save <em>dataRecord</em> back
+              to the data store.
+            </li>
+            <li>
+              If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+              class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+              with <em>error</em> as the <code>value</code> argument.
+            </li>
+            <li>
+              When the request has been successfully completed:
+            </li>
+            <ol>
+              <li>
+                Invoke <em>resolver</em>'s <a
+                class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+                without assigning a value to the the <code>value</code> argument.
+              </li>
+            </ol>
+          </ol>
         </ol>
 
         <p>
@@ -619,11 +657,35 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
+            Let <var>promise</var> be a new <code>Promise</code> object and
+            <var>resolver</var> be its associated <code>resolver</code>.
           </li>
           <li>
-            Step 2.
+            Return <var>promise</var> to the caller.
           </li>
+          <li>
+            Make a request to the data store to add the <code>data</code>
+            parameter passed in the request.
+          </li>
+          <li>
+            If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            with <em>error</em> as the <code>value</code> argument.
+          </li>
+          <li>
+            When the request has been successfully completed:
+          </li>
+          <ol>
+            <li>
+              Let <var>id</var> be the generated identifier of the added data
+              record.
+            </li>
+            <li>
+              Invoke <em>resolver</em>'s <a
+              class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+              with <em>id</em> as the <code>value</code> argument.
+            </li>
+          </ol>
         </ol>
 
         <p>
@@ -632,11 +694,47 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
+            Let <var>promise</var> be a new <code>Promise</code> object and
+            <var>resolver</var> be its associated <code>resolver</code>.
           </li>
           <li>
-            Step 2.
+            Return <var>promise</var> to the caller.
           </li>
+          <li>
+            Make a request to the data store to retrieve the data record with
+            the identifier equal to the <code>id</code> parameter passed in the
+            request.
+          </li>
+          <li>
+            If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            with <em>false</em> as the <code>value</code> argument.
+          </li>
+          <li>
+            When the request has been successfully completed:
+          </li>
+          <ol>
+            <li>
+              Make a request to the data store to delete the data record with
+              the identifier equal to the <code>id</code> parameter passed in
+              the request.
+            </li>
+            <li>
+              If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+              class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+              with <em>false</em> as the <code>value</code> argument.
+            </li>
+            <li>
+              When the request has been successfully completed:
+            </li>
+            <ol>
+              <li>
+                Invoke <em>resolver</em>'s <a
+                class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+                with <em>true</em> as the <code>value</code> argument.
+              </li>
+            </ol>
+          </ol>
         </ol>
 
         <p>
@@ -645,11 +743,30 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
+            Let <var>promise</var> be a new <code>Promise</code> object and
+            <var>resolver</var> be its associated <code>resolver</code>.
           </li>
           <li>
-            Step 2.
+            Return <var>promise</var> to the caller.
           </li>
+          <li>
+            Make a request to the data store to clear all the data records.
+          </li>
+          <li>
+            If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            with <em>error</em> as the <code>value</code> argument.
+          </li>
+          <li>
+            When the request has been successfully completed:
+          </li>
+          <ol>
+            <li>
+              Invoke <em>resolver</em>'s <a
+              class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+              without assigning a value to the the <code>value</code> argument.
+            </li>
+          </ol>
         </ol>
 
         <p>
@@ -658,11 +775,35 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
+            Let <var>promise</var> be a new <code>Promise</code> object and
+            <var>resolver</var> be its associated <code>resolver</code>.
           </li>
           <li>
-            Step 2.
+            Return <var>promise</var> to the caller.
           </li>
+          <li>
+            Make a request to the data store to get the total number of data
+            records.
+          </li>
+          <li>
+            If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            with <em>error</em> as the <code>value</code> argument.
+          </li>
+          <li>
+            When the request has been successfully completed:
+          </li>
+          <ol>
+            <li>
+              Let <var>length</var> be the total number of data records saved in
+              the data store.
+            </li>
+            <li>
+              Invoke <em>resolver</em>'s <a
+              class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+              with <em>length</em> as the <code>value</code> argument.
+            </li>
+          </ol>
         </ol>
 
         <p>
@@ -671,11 +812,25 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
+            Make a request to the system to retrieve a cursor that can iterate
+            through the change history of the current data store.
           </li>
           <li>
-            Step 2.
+            When the request has been successfully completed:
           </li>
+          <ol>
+            <li>
+              Let <var>dataStoreCursor</var> be a new instance of
+              <a>DataStoreCursor</a>.
+            </li>
+            <li>
+              Set the <code>store</code> of <em>dataStoreCursor</em> to the
+              current data store.
+            </li>
+            <li>
+              Return <em>dataStoreCursor</em>.
+            </li>
+          </ol>
         </ol>
       </section>
 
@@ -751,11 +906,53 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
+            Let <var>promise</var> be a new <code>Promise</code> object and
+            <var>resolver</var> be its associated <code>resolver</code>.
           </li>
           <li>
-            Step 2.
+            Return <var>promise</var> to the caller.
           </li>
+          <li>
+            Make a request to the system to retrieve the information of the next
+            operation that changes a data record in the data store.
+          </li>
+          <li>
+            If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            with <em>error</em> as the <code>value</code> argument.
+          </li>
+          <li>
+            When the request has been successfully completed:
+          </li>
+          <ol>
+            <li>
+              Let <var>dataStoreTask</var> be a new instance of
+              <a>DataStoreTask</a>:
+            </li>
+            <ol>
+              <li>
+                Set the <code>revisionId</code> of <em>dataStoreTask</em> to the
+                revision of the data store, which changes a data record.
+              </li>
+              <li>
+                Set the <code>id</code> of <em>dataStoreTask</em> to the
+                identifier of the changed data record in the data store.
+              </li>
+              <li>
+                Set the <code>operation</code> of <em>dataStoreTask</em> to the
+                type of operation that changes the data record in the data store.
+              </li>
+              <li>
+                Set the <code>data</code> of <em>dataStoreTask</em> to the
+                changed data record in the data store.
+              </li>
+            </ol>
+            <li>
+              Invoke <em>resolver</em>'s <a
+              class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+              with <em>dataStoreTask</em> as the <code>value</code> argument.
+            </li>
+          </ol>
         </ol>
 
         <p>
@@ -764,10 +961,8 @@ Style guide to contributors:
         </p>
         <ol>
           <li>
-            Step 1.
-          </li>
-          <li>
-            Step 2.
+            Make a request to the system to terminate the current cursor
+            iterating through the change history of the data store.
           </li>
         </ol>
       </section>
@@ -885,11 +1080,11 @@ Style guide to contributors:
       <h2>Acknowledgements</h2>
       <p>
         The editors would like to express their gratitude to the Mozilla Firefox
-        OS Team and specially to Jonas Sicking, Mounir Lamouri, Ehsan Akhgari
-        and Hsin-Yi Tsai for their technical guidance, as well as to Andrea
-        Marchesini for his implementation work and support. Also, huge thanks to
-        Zoltan Kis form Intel for his suggestions and contributions to this
-        specification.
+        OS Team and specially to Jonas Sicking, Mounir Lamouri, Ehsan Akhgari,
+        Thinker Lee and Hsin-Yi Tsai for their technical guidance, as well as to
+        Andrea Marchesini for his implementation work and support. Also, huge
+        thanks to Zoltan Kis form Intel for his suggestions and contributions to
+        this specification.
       </p>
     </section>
 
