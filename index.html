@@ -378,7 +378,8 @@ Style guide to contributors:
           <li>
             Make a request to the system to retrieve the data store(s) with the
             label equal to the <code>label</code> parameter passed in the
-            request.
+            request, where the caller application has claimed the data store
+            access by <code>datastores-access</code> in its manifest.
           </li>
           <li>
             If an <var>error</var> occurs invoke <em>resolver</em>'s <a
@@ -391,8 +392,7 @@ Style guide to contributors:
           <ol>
             <li>
               Let <var>dataStores</var> be the array of the retrieved
-              <a>DataStore</a> elements whose label matches the
-              <code>label</code> parameter.
+              <a>DataStore</a> elements.
             </li>
             <li>
               Invoke <em>resolver</em>'s <a
@@ -609,6 +609,12 @@ Style guide to contributors:
             Return <var>promise</var> to the caller.
           </li>
           <li>
+            If the <code>readOnly</code> attribute of the current data store is
+            <em>true</em> to the caller, invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            without assigning a value to the the <code>value</code> argument.
+          </li>
+          <li>
             Make a request to the data store to retrieve the data record with
             the identifier equal to the <code>id</code> parameter passed in the
             request.
@@ -664,6 +670,12 @@ Style guide to contributors:
             Return <var>promise</var> to the caller.
           </li>
           <li>
+            If the <code>readOnly</code> attribute of the current data store is
+            <em>true</em> to the caller, invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            without assigning a value to the the <code>value</code> argument.
+          </li>
+          <li>
             Make a request to the data store to add the <code>data</code>
             parameter passed in the request.
           </li>
@@ -699,6 +711,12 @@ Style guide to contributors:
           </li>
           <li>
             Return <var>promise</var> to the caller.
+          </li>
+          <li>
+            If the <code>readOnly</code> attribute of the current data store is
+            <em>true</em> to the caller, invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            with <em>false</em> as the <code>value</code> argument.
           </li>
           <li>
             Make a request to the data store to retrieve the data record with
@@ -748,6 +766,12 @@ Style guide to contributors:
           </li>
           <li>
             Return <var>promise</var> to the caller.
+          </li>
+          <li>
+            If the <code>readOnly</code> attribute of the current data store is
+            <em>true</em> to the caller, invoke <em>resolver</em>'s <a
+            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+            without assigning a value to the the <code>value</code> argument.
           </li>
           <li>
             Make a request to the data store to clear all the data records.
