@@ -484,15 +484,21 @@ Style guide to contributors:
 
         <dt>Promise add ()</dt>
           <dd>
-            This method makes a request to add a new data record by the
-            <code>data</code> parameter. It returns a new <code>Promise</code>
-            that will be used to notify the caller about the result of the
-            operation, which is an identifier to access the data record that is
-            added.
+            This method makes a request to add a new data record or update the
+            existing data record by the <code>data</code> parameter and the
+            optional <code>id</code> parameter. It returns a new
+            <code>Promise</code> that will be used to notify the caller about
+            the result of the operation, which is an identifier to access the
+            data record that is added or updated.
             <dl class='parameters'>
               <dt>any data</dt>
                 <dd>
-                  Specifies the content of the data record to add.
+                  Specifies the content of the data record to add or update.
+                </dd>
+              <dt>optional DataStoreKey id</dt>
+                <dd>
+                  Identifies the existing data record that is requested to be
+                  updated.
                 </dd>
             </dl>
           </dd>
@@ -676,27 +682,83 @@ Style guide to contributors:
             without assigning a value to the the <code>value</code> argument.
           </li>
           <li>
-            Make a request to the data store to add the <code>data</code>
-            parameter passed in the request.
-          </li>
-          <li>
-            If an <var>error</var> occurs invoke <em>resolver</em>'s <a
-            class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
-            with <em>error</em> as the <code>value</code> argument.
-          </li>
-          <li>
-            When the request has been successfully completed:
+            Check if the <code>id</code> parameter is passed in the request:
           </li>
           <ol>
             <li>
-              Let <var>id</var> be the generated identifier of the added data
-              record.
+              If it is passed:
+              <ol>
+                <li>
+                  Make a request to the data store to retrieve the data record
+                  with the identifier equal to the <code>id</code> parameter.
+                </li>
+                <li>
+                  If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+                  class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+                  with <em>error</em> as the <code>value</code> argument.
+                </li>
+                <li>
+                  When the request has been successfully completed:
+                </li>
+                <ol>
+                  <li>
+                    Let <var>dataRecord</var> be the retrieved data record.
+                  </li>
+                  <li>
+                    Replace <em>dataRecord</em> by the <code>data</code>
+                    parameter passed in the request.
+                  </li>
+                  <li>
+                    Make a request to the data store to save <em>dataRecord</em>
+                    back to the data store.
+                  </li>
+                  <li>
+                    If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+                    class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+                    with <em>error</em> as the <code>value</code> argument.
+                  </li>
+                  <li>
+                    When the request has been successfully completed:
+                  </li>
+                  <ol>
+                    <li>
+                      Invoke <em>resolver</em>'s <a
+                      class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+                      with the <code>id</code> parameter as the
+                      <code>value</code> argument.
+                    </li>
+                  </ol>
+                </ol>
+              </ol>
             </li>
             <li>
-              Invoke <em>resolver</em>'s <a
-              class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
-              with <em>id</em> as the <code>value</code> argument.
+              If it is not passed:
             </li>
+            <ol>
+              <li>
+                Make a request to the data store to add the <code>data</code>
+                parameter passed in the request.
+              </li>
+              <li>
+                If an <var>error</var> occurs invoke <em>resolver</em>'s <a
+                class="internalDFN" href="#dfn-reject-algorithm">reject algorithm</a>
+                with <em>error</em> as the <code>value</code> argument.
+              </li>
+              <li>
+                When the request has been successfully completed:
+              </li>
+              <ol>
+                <li>
+                  Let <var>id</var> be the generated identifier of the added data
+                  record.
+                </li>
+                <li>
+                  Invoke <em>resolver</em>'s <a
+                  class="internalDFN" href="#dfn-fulfill-algorithm"> fulfill algorithm</a>
+                  with <em>id</em> as the <code>value</code> argument.
+                </li>
+              </ol>
+            </ol>
           </ol>
         </ol>
 
