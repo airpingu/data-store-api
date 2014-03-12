@@ -264,7 +264,10 @@ Style guide to contributors:
           to specify the generic category of the data store,
           <code>readonly</code> to specify whether the data store can be read by
           other applications and <code>description</code> to describe the
-          purpose.
+          purpose. Note that the name of data store has to be unique across
+          applications' manifests; otherwise, the <dfn>user agent</dfn> will
+          stop the application's installation when it detects the duplicated
+          registration of the data store name.
         </p>
 
         <p>
