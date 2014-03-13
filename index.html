@@ -87,113 +87,116 @@ Style guide to contributors:
         application needs in order to support its UI.
       </p>
 
-      <p>
-        If an application has the privilege to modify the content of the data
-        store, it can use a bunch of basic methods defined in the
-        <a>DataStore</a> to manage the data records in the data store, which is
-        shown as the following example.
-      </p>
+      <section>
+        <h3>Examples</h3>
+        <p>
+          If an application has the privilege to modify the content of the data
+          store, it can use a bunch of basic methods defined in the
+          <a>DataStore</a> to manage the data records in the data store, which is
+          shown as the following example.
+        </p>
 
-      <pre class="example highlight">
-        // Retrieve a list of data stores called 'contacts'.
-        navigator.getDataStores('contacts').then(function(stores) {
-          if (!stores.length) {
-            return;
-          }
+        <pre class="example highlight">
+          // Retrieve a list of data stores called 'contacts'.
+          navigator.getDataStores('contacts').then(function(stores) {
+            if (!stores.length) {
+              return;
+            }
 
-          // Check if the application is allowed to modify the data store.
-          if (stores[0].readOnly) {
-            return;
-          }
+            // Check if the application is allowed to modify the data store.
+            if (stores[0].readOnly) {
+              return;
+            }
 
-          // Retrieve an object.
-          stores[0].get(42).then(function(obj) {
-            // Update the object
-            obj.name = 'foo';
-            stores[0].update(obj, 42).then(function(id) {
-              // The object has been updated.
+            // Retrieve an object.
+            stores[0].get(42).then(function(obj) {
+              // Update the object
+              obj.name = 'foo';
+              stores[0].update(obj, 42).then(function(id) {
+                // The object has been updated.
+              }, function(error) {
+                // The object fails to be updated.
+              });
+            });
+      
+            // Delete an object.
+            stores[0].remove(23).then(function(success) {
+              if (success) {
+                // The object has been deleted.
+              } else {
+                // The object fails to be deleted.
+              }
+            });
+      
+            // Add a new object.
+            stores[0].insert({ name: "bar" }).then(function(id) {
+              // The object has been added.
             }, function(error) {
-              // The object fails to be updated.
+              // The object fails to be added.
             });
           });
-    
-          // Delete an object.
-          stores[0].remove(23).then(function(success) {
-            if (success) {
-              // The object has been deleted.
-            } else {
-              // The object fails to be deleted.
-            }
-          });
-    
-          // Add a new object.
-          stores[0].insert({ name: "bar" }).then(function(id) {
-            // The object has been added.
-          }, function(error) {
-            // The object fails to be added.
-          });
-        });
-      </pre>
+        </pre>
 
-      <p>
-        An application can call the <code>sync()</code> method defined in the
-        <a>DataStore</a> to keep its local storage synchronized with the data
-        store, which creates a <a>DataStoreCursor</a> to retrieve the change
-        history starting from a certain revision kept in the application to the
-        current revision of the data store, which is shown as the following
-        example.
-      </p>
-      <pre class="example highlight">
-        var appLocalRevisionId = "revision_id_kept_by_app";
+        <p>
+          An application can call the <code>sync()</code> method defined in the
+          <a>DataStore</a> to keep its local storage synchronized with the data
+          store, which creates a <a>DataStoreCursor</a> to retrieve the change
+          history starting from a certain revision kept in the application to the
+          current revision of the data store, which is shown as the following
+          example.
+        </p>
+        <pre class="example highlight">
+          var appLocalRevisionId = "revision_id_kept_by_app";
 
-        navagiator.getDataStores('contacts').then(functions(stores) {
-          if (!stores.length) {
-            return;
-          }
-
-          // Check if the application's local storage is out-of-date.
-          if (appLocalRevisionId == stores[0].revisionId) {
-            dump("The app's local storage is already in sync.\n");
-            return;
-          }
- 
-          var cursor = stores[0].sync(appLocalRevisionId);
- 
-          function cursorResolve(task) {
-            switch (task.operation) {
-              case 'done':
-                // All the data are in sync. Update the local revision ID.
-                dump("The current revision ID: " + task.revisionId + "\n");
-                appLocalRevisionId = task.revisionId;
-                return;
-
-              case 'clear':
-                // All the data have to be deleted in the local storage.
-                break;
-
-              case 'add':
-                // A new object has to be added in the local storage.
-                dump("Add ID: " + task.id + " data: " + task.data + "\n");
-                break;
-
-              case 'update':
-                // An object has to be updated in the local storage.
-                dump("Update ID: " + task.id + " data: " + task.data + "\n");
-                break;
-
-              case 'remove':
-                // An object has to be deleted in the local storage.
-                dump("Remove ID: " + task.id + " data: " + task.data + "\n");
-                break;
+          navagiator.getDataStores('contacts').then(functions(stores) {
+            if (!stores.length) {
+              return;
             }
 
+            // Check if the application's local storage is out-of-date.
+            if (appLocalRevisionId == stores[0].revisionId) {
+              dump("The app's local storage is already in sync.\n");
+              return;
+            }
+   
+            var cursor = stores[0].sync(appLocalRevisionId);
+   
+            function cursorResolve(task) {
+              switch (task.operation) {
+                case 'done':
+                  // All the data are in sync. Update the local revision ID.
+                  dump("The current revision ID: " + task.revisionId + "\n");
+                  appLocalRevisionId = task.revisionId;
+                  return;
+
+                case 'clear':
+                  // All the data have to be deleted in the local storage.
+                  break;
+
+                case 'add':
+                  // A new object has to be added in the local storage.
+                  dump("Add ID: " + task.id + " data: " + task.data + "\n");
+                  break;
+
+                case 'update':
+                  // An object has to be updated in the local storage.
+                  dump("Update ID: " + task.id + " data: " + task.data + "\n");
+                  break;
+
+                case 'remove':
+                  // An object has to be deleted in the local storage.
+                  dump("Remove ID: " + task.id + " data: " + task.data + "\n");
+                  break;
+              }
+
+              cursor.next().then(cursorResolve);
+            }
+   
+            // Start to sync.
             cursor.next().then(cursorResolve);
-          }
- 
-          // Start to sync.
-          cursor.next().then(cursorResolve);
-        });
-      </pre>
+          });
+        </pre>
+      </section>
     </section>
     
 <!-- - - - - - - - - - - - - - - Conformance - - - - - - - - - - - - - - - - -->
