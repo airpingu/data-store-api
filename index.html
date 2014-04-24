@@ -167,7 +167,7 @@ Style guide to contributors:
             stores[0].get(42).then(function(obj) {
               // Update the object
               obj.name = 'foo';
-              stores[0].update(obj, 42).then(function(id) {
+              stores[0].update(42, obj).then(function(id) {
                 // The object has been updated.
               }, function(error) {
                 // The object fails to be updated.
@@ -522,17 +522,17 @@ Style guide to contributors:
         <dt>Promise update ()</dt>
           <dd>
             This method makes a request to update the existing data record by
-            the <code>data</code> and the <code>id</code> parameters. It returns
+            the <code>id</code> and the <code>data</code> parameters. It returns
             a new <code>Promise</code> that will be used to notify the caller
             about the result of the operation.
             <dl class='parameters'>
-              <dt>any data</dt>
-                <dd>
-                  Specifies the content of the data record to update.
-                </dd>
               <dt>DataStoreKey id</dt>
                 <dd>
                   Identifies the data record that is requested to be updated.
+                </dd>
+              <dt>any data</dt>
+                <dd>
+                  Specifies the content of the data record to update.
                 </dd>
             </dl>
           </dd>
