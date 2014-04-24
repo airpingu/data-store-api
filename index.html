@@ -30,7 +30,7 @@
         otherLinks: [{
           key: "Repository",
           data: [{
-            value: "We are on Github.",
+            value: "We are on GitHub.",
             href: "https://github.com/airpingu/data-store-api/"
           }, {
             value: "File a bug.",
@@ -88,6 +88,61 @@ Style guide to contributors:
       </p>
 
       <section>
+        <h3>Motivation</h3>
+        <p>
+          The Contacts Manager API and the Messaging API were originally
+          designed to support richer querying, like filtering, sorting and
+          grouping data. However, they both have the severe shortcoming that the
+          consumers are forced to live with the limitations of what querying
+          capabilities those APIs can have.
+        </p>
+        <p>
+          That's why we are constantly having to revise these APIs because it
+          turns out that the querying capabilities aren't matching what our
+          applications need, which is not a workable long-term solution. Also,
+          it's not even a workable short-term solution for third-party
+          applications since we cannot revise the APIs to support the
+          capabilities that every third-party application developer needs.
+        </p>
+        <p>
+          Therefore, we've been figuring out such a generic Data Store API to
+          allow applications to synchronize and save data into their own
+          application-local storages which can be managed in various formats
+          than we could think of and bake into APIs, thus supporting richer
+          querying capabilities that the application really needs.
+        </p>
+        <p>
+          Note that the Data Store API is still in charge of maintaining a
+          central storage to keep data which can be added, retrieved or deleted
+          by applications through a bunch of methods provided by the Data Store
+          API. This implies the application doesn't need to duplicate the whole
+          data in its own local storage. Instead, it can simply synchronize the
+          data that is actively required to construct the needed indexes for its
+          own querying purpose.
+        </p>
+      </section>
+
+      <section>
+        <h3>More than IndexedDB API</h3>
+        <p>
+          Similar to the IndexedDB API, the Data Store API provides some
+          database-like methods to add, retrieve and delete data records but it
+          doesn't expose methods for building indexes or searching data.
+          Instead, it provides a synchronizing mechanism for applications to
+          keep their local storages up-to-date and accordingly update the
+          local indexes needed for filtering data.
+        </p>
+        <p>
+          The other difference from the IndexedDB API is the Data Store API
+          provides a central data storage which can be concurrently accessed and
+          modified by multiple applications. Also, it provides a permission
+          model to allow different applications to have different types of
+          priviledges to change the data store or listen to the change of the
+          data store.
+        </p>
+      </section>
+
+      <section>
         <h3>Examples</h3>
         <p>
           If an application has the privilege to modify the content of the data
@@ -97,7 +152,7 @@ Style guide to contributors:
         </p>
 
         <pre class="example highlight">
-          // Retrieve a list of data stores called 'contacts'.
+          // Retrieve a list of data stores labeled as 'contacts'.
           navigator.getDataStores('contacts').then(function(stores) {
             if (!stores.length) {
               return;
@@ -148,6 +203,7 @@ Style guide to contributors:
         <pre class="example highlight">
           var appLocalRevisionId = "revision_id_kept_by_app";
 
+          // Retrieve a list of data stores labeled as 'contacts'.
           navagiator.getDataStores('contacts').then(functions(stores) {
             if (!stores.length) {
               return;
@@ -876,7 +932,7 @@ Style guide to contributors:
           <tbody>
             <tr>
               <td><strong><code>onchange</code></strong></td>
-              <td><code><dfn id="dfn-change-event">onchange</dfn></code></td>
+              <td><code><dfn id="dfn-change-event">change</dfn></code></td>
               <td><a><code>DataStoreChangeEvent</code></a></td>
               <td>
                 Handles the information of the data record changed in the data
@@ -991,11 +1047,10 @@ Style guide to contributors:
       </section>
 
       <div class='note'>
-        Define the behavior: if something changes in the data store when
-        the cursor is synchronizing, all the changes will be managed by the
-        cursor as additional operations, which means that when the cursor
-        completes its tasks, the app will be always in sync with the current
-        revision of the data store. 
+        If some data change in the data store when the cursor is synchronizing,
+        all the changes will be managed by the cursor as additional operations,
+        which means when the cursor completes its tasks, the application will be
+        always in synchronization with the current revision of the data store.
       </div>
 
     </section>
