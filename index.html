@@ -1124,7 +1124,9 @@ Style guide to contributors:
         <dt>readonly attribute DOMString owner</dt>
           <dd>
             MUST return the manifest URL of the application which changes the
-            data record in the data store.
+            data record in the data store. Note that the <code>owner</code> here
+            is not the owner application of the data store. Instead, it's the
+            application making the change in the data store.
           </dd>
       </dl>
     </section>
