@@ -263,8 +263,7 @@ Style guide to contributors:
           For the application that provides the data store, its manifest MUST be
           claimed to own the data store by <code>datastores-owned</code>, where
           the JSON object can contain multiple names representing different
-          data stores respectively. Each data store can use <code>label</code>
-          to specify the generic category of the data store,
+          data stores respectively. Each data store can use
           <code>readonly</code> to specify whether the data store can be read by
           other applications and <code>description</code> to describe the
           purpose. Note that the name of data store has to be unique across
@@ -283,7 +282,6 @@ Style guide to contributors:
           {
             datastores-owned: {
               "facebook-contacts": {
-                "label": "contacts",
                 "readonly": true,
                 "description": "own the Facebook contacts data store"
               }
@@ -355,14 +353,14 @@ Style guide to contributors:
           <dt>Promise getDataStores ()</dt>
             <dd>
               This method makes a request to retrieve the data stores by the
-              <code>label</code> parameter. It returns a new
+              <code>name</code> parameter. It returns a new
               <code>Promise</code> that will be used to notify the caller about
               the result of the operation, which is an array of <a>DataStore</a>
-              elements to access the data stores that are all labeled as
-              <code>label</code> but may have different <code>name</code>.
+              elements to access the data stores that are all named as
+              <code>name</code>.
               <dl class='parameters'>
-                <dt>DOMString label</dt>
-                  <dd>Specifies the label of the data store.</dd>
+                <dt>DOMString name</dt>
+                  <dd>Specifies the name of the data store.</dd>
               </dl>
             </dd>
         </dl>
@@ -383,7 +381,7 @@ Style guide to contributors:
           </li>
           <li>
             Make a request to the system to retrieve the data store(s) with the
-            label equal to the <code>label</code> parameter passed in the
+            name equal to the <code>name</code> parameter passed in the
             request, where the caller application has claimed the data store
             access by <code>datastores-access</code> in its manifest.
           </li>
@@ -422,17 +420,12 @@ Style guide to contributors:
       <div title="typedef (DOMString or unsigned long) DataStoreKey" class='idl'></div>
 
       <dl title="interface DataStore : EventTarget" class="idl">
-
-        <dt>readonly attribute DOMString <a>label</a></dt>
-          <dd>
-            MUST return the label of the data store. Note that different data
-            stores can have the same label.
-          </dd>
-
         <dt>readonly attribute DOMString <a>name</a></dt>
           <dd>
-            MUST return the name of the data store. Note that the name has to
-            be unique to identify each data store.
+            MUST return the name of the data store. Note that different data
+            stores can share the same name. For example, the Facebook contacts
+            data store and the built-in SMS/MMS contacts data store can have the
+            same name <em>contacts</em>.
           </dd>
       
         <dt>readonly attribute DOMString owner</dt>
