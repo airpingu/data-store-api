@@ -607,8 +607,14 @@ Style guide to contributors:
         </dt>
           <dd>
             Handles the <code>change</code> event of type
-            <a>DataStoreChangeEvent</a>, fired when a data record is
-            added, updated or deleted in the data store.
+            <a>DataStoreChangeEvent</a>, fired when a data record is added,
+            updated or deleted in the data store. Note that if some data change
+            in the data store when the <a>DataStoreCursor</a> is still
+            synchronizing data and the cursor's <a><code>close</code></a> method
+            has not yet been called, all the change events will not be
+            dispatched to the application's <code>onchange</code> event handler.
+            Instead, all the changes will be managed by the cursor's
+            <a><code>next</code></a> method as additional operations.
           </dd>
       </dl>
 
@@ -973,7 +979,14 @@ Style guide to contributors:
         <dt>void close ()</dt>
           <dd>
             This method makes a request to terminate the cursor iterating
-            through the change history of the data store.
+            through the change history of the data store. Note that this method
+            has to be explicitly called when the cursor completes its tasks.
+            Otherwise, if some data changes in the data store when the cursor is
+            still synchronizing data, all the changes will be managed by the
+            cursor's <a><code>next</code></a> method as additional operations,
+            which means when the cursor completes its tasks, the application
+            will be in synchronization with the current revision of the data
+            store.
           </dd>
       </dl>
     
@@ -1045,14 +1058,6 @@ Style guide to contributors:
           </li>
         </ol>
       </section>
-
-      <div class='note'>
-        If some data change in the data store when the cursor is synchronizing,
-        all the changes will be managed by the cursor as additional operations,
-        which means when the cursor completes its tasks, the application will be
-        always in synchronization with the current revision of the data store.
-      </div>
-
     </section>
 
 
