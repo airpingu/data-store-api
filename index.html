@@ -1075,22 +1075,24 @@ Style guide to contributors:
             changes a data record.
           </dd>
 
-        <dt>DataStoreKey id</dt>
-          <dd>
-            MUST return the identifier of the changed data record in the data
-            store.
-          </dd>
-
         <dt>DataStoreOperation operation</dt>
           <dd>
             MUST return the type of operation that changes the data record in
             the data store.
           </dd>
 
-        <dt>any data</dt>
+        <dt>DataStoreKey? id</dt>
+          <dd>
+            MUST return the identifier of the changed data record in the data
+            store. MUST return <em>null</em> if the <code>operation</code>
+            is <em>clear</em> or <em>done</em>.
+          </dd>
+
+        <dt>any? data</dt>
           <dd>
             MUST return an arbitrary object to represent the changed data record
-            in the data store.
+            in the data store. MUST return <em>null</em> if the
+            <code>operation</code> is <em>clear</em> or <em>done</em>.
           </dd>
       </dl>
     </section>
@@ -1109,16 +1111,17 @@ Style guide to contributors:
             changes a data record.
           </dd>
 
-        <dt>readonly attribute DataStoreKey id</dt>
-          <dd>
-            MUST return the identifier of the changed data record in the data
-            store.
-          </dd>
-
         <dt>readonly attribute DataStoreOperation operation</dt>
           <dd>
             MUST return the type of operation that changes the data record in
             the data store.
+          </dd>
+
+        <dt>readonly attribute DataStoreKey? id</dt>
+          <dd>
+            MUST return the identifier of the changed data record in the data
+            store. MUST return <em>null</em> if the <code>operation</code> is
+            <em>clear</em> or <em>done</em>.
           </dd>
 
         <dt>readonly attribute DOMString owner</dt>
