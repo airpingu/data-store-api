@@ -554,15 +554,15 @@ Style guide to contributors:
 
         <dt>Promise remove ()</dt>
           <dd>
-            This method makes a request to delete the data record by the
+            This method makes a request to delete the data record(s) by the
             <code>id</code> parameter. It returns a new <code>Promise</code>
             that will be used to notify the caller about the result of the
             operation, which is a boolean value to indicate whether the data
-            record is deleted or not.
+            record(s) is successfully deleted or not.
             <dl class='parameters'>
-              <dt>DataStoreKey id</dt>
+              <dt>DataStoreKey... id</dt>
                 <dd>
-                  Identifies the data record that is requested to be deleted.
+                  Identifies the data record(s) that is requested to be deleted.
                 </dd>
             </dl>
           </dd>
@@ -780,7 +780,7 @@ Style guide to contributors:
             with <em>false</em> as the <code>value</code> argument.
           </li>
           <li>
-            Make a request to the data store to retrieve the data record with
+            Make a request to the data store to retrieve the data record(s) with
             the identifier equal to the <code>id</code> parameter passed in the
             request.
           </li>
@@ -794,7 +794,7 @@ Style guide to contributors:
           </li>
           <ol>
             <li>
-              Make a request to the data store to delete the data record with
+              Make a request to the data store to delete the data record(s) with
               the identifier equal to the <code>id</code> parameter passed in
               the request.
             </li>
@@ -1174,8 +1174,8 @@ Style guide to contributors:
         OS Team and specially to Jonas Sicking, Mounir Lamouri, Ehsan Akhgari,
         Thinker Lee and Hsin-Yi Tsai for their technical guidance, as well as to
         Andrea Marchesini for his implementation work and support. Also, huge
-        thanks to Zoltan Kis form Intel for his suggestions and contributions to
-        this specification.
+        thanks to Zoltan Kis (Intel) and Christophe Dumez (Samsung) for their
+        suggestions and contributions to this specification.
       </p>
     </section>
 
