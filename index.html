@@ -153,8 +153,8 @@ Style guide to contributors:
         </p>
 
         <pre class="example highlight">
-          // Retrieve a list of data stores named as 'contacts'.
-          navigator.getDataStores('contacts').then(function(stores) {
+          // Retrieve a list of data stores named as 'fb-contacts'.
+          navigator.getDataStores('fb-contacts').then(function(stores) {
             if (!stores.length) {
               return;
             }
@@ -204,8 +204,8 @@ Style guide to contributors:
         <pre class="example highlight">
           var appLocalRevisionId = "revision_id_kept_by_app";
 
-          // Retrieve a list of data stores named as 'contacts'.
-          navagiator.getDataStores('contacts').then(functions(stores) {
+          // Retrieve a list of data stores named as 'fb-contacts'.
+          navagiator.getDataStores('fb-contacts').then(functions(stores) {
             if (!stores.length) {
               return;
             }
@@ -320,7 +320,7 @@ Style guide to contributors:
           For the application that provides the data store, its manifest MUST be
           claimed to own the data store by <code>datastores-owned</code>, where
           the JSON object can contain multiple properties representing different
-          types of data stores respectively. Each data store can use
+          names of data stores respectively. Each data store can use
           <code>readonly</code> to specify whether the data store can be read by
           other applications and <code>description</code> to describe the
           purpose.
@@ -328,14 +328,14 @@ Style guide to contributors:
 
         <p>
           As shown as the following example, if a Facebook applicaton wants to
-          provide a read-only <em>contacts</em> data store, its manifest MUST be
-          claimed to own the data store by setting the attribute
+          provide a read-only <em>fb-contacts</em> data store, its manifest MUST
+          be claimed to own the data store by setting the attribute
           <code>readonly</code> to <em>true</em>.
         </p>
         <pre class="example highlight">
           {
             datastores-owned: {
-              "contacts": {
+              "fb-contacts": {
                 "readonly": true,
                 "description": "own the Facebook contacts data store"
               }
@@ -347,7 +347,7 @@ Style guide to contributors:
           For the application that wants to access the data store, its manifest
           MUST be claimed to access the data store by
           <code>datastores-access</code>, where the JSON object can contain
-          multiple properties representing different types of data stores
+          multiple properties representing different names of data stores
           respectively. Each data store can use <code>access</code> to specify
           the application's accessibility and <code>description</code> to
           describe the purpose.
@@ -356,16 +356,16 @@ Style guide to contributors:
         <p>
           As shown as the following example, if the application wants to read or
           modify (e.g., add, update, remove, clear... etc) the content of the
-          <em>contacts</em> data store, its manifest MUST be claimed to access
-          the <em>contacts</em> data store by setting the attribute
+          <em>fb-contacts</em> data store, its manifest MUST be claimed to access
+          the <em>fb-contacts</em> data store by setting the attribute
           <code>access</code> to <em>readwrite</em>.
         </p>
         <pre class="example highlight">
           {
             datastores-access: {
-              "contacts": {
+              "fb-contacts": {
                 "access": "readwrite",
-                "description": "access (read and write) the contacts data stores"
+                "description": "access (read and write) the Facebook contacts data stores"
               }
             }
           }
@@ -373,17 +373,17 @@ Style guide to contributors:
 
         <p>
           As shown as the following example, if the application simply wants to
-          read the content of the <em>contacts</em> data store without the need
-          of modifying it, its manifest MUST be claimed to access the
-          <em>contacts</em> data store by setting the attribute
+          read the content of the <em>fb-contacts</em> data store without the
+          need of modifying it, its manifest MUST be claimed to access the
+          <em>fb-contacts</em> data store by setting the attribute
           <code>access</code> to <em>readonly</em>.
         </p>
         <pre class="example highlight">
           {
             datastores-access: {
-              "contacts": {
+              "fb-contacts": {
                 "access": "readonly",
-                "description": "access (read only) the contacts data store"
+                "description": "access (read only) the Facebook contacts data store"
               }
             }
           }
@@ -410,14 +410,14 @@ Style guide to contributors:
           <dt>Promise getDataStores ()</dt>
             <dd>
               This method makes a request to retrieve the data stores by the
-              <code>type</code> parameter. It returns a new
+              <code>name</code> parameter. It returns a new
               <code>Promise</code> that will be used to notify the caller about
               the result of the operation, which is an array of <a>DataStore</a>
-              elements to access the data stores which have the same type equal
-              to the <code>type</code>.
+              elements to access the data stores which have the same name equal
+              to the <code>name</code>.
               <dl class='parameters'>
-                <dt>DOMString type</dt>
-                  <dd>Specifies the type of the data store.</dd>
+                <dt>DOMString name</dt>
+                  <dd>Specifies the name of the data store.</dd>
               </dl>
             </dd>
         </dl>
@@ -438,7 +438,7 @@ Style guide to contributors:
           </li>
           <li>
             Make a request to the system to retrieve the data store(s) with the
-            type equal to the <code>type</code> parameter passed in the
+            name equal to the <code>name</code> parameter passed in the
             request, where the caller application has claimed the data store
             access by <code>datastores-access</code> in its manifest.
           </li>
@@ -477,12 +477,11 @@ Style guide to contributors:
       <div title="typedef (DOMString or unsigned long) DataStoreKey" class='idl'></div>
 
       <dl title="interface DataStore : EventTarget" class="idl">
-        <dt>readonly attribute DOMString <a>type</a></dt>
+        <dt>readonly attribute DOMString <a>name</a></dt>
           <dd>
-            MUST return the type of the data store. Note that different data
-            stores can share the same type. For example, the Facebook contacts
-            data store and the built-in SMS/MMS contacts data store can have the
-            same type <em>contacts</em>.
+            MUST return the name of the data store. Note that different data
+            stores can share the same name as long as they have the same
+            database schema/format.
           </dd>
       
         <dt>readonly attribute DOMString owner</dt>
